@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from difflib import get_close_matches
 import uvicorn
+from urllib.parse import unquote
 
 app = FastAPI(title="Course Recommendation API", version="2.0")
 
@@ -120,7 +121,7 @@ def search_courses(keyword: str = Query(..., description="Keyword to search in c
     if data is None:
         return JSONResponse(status_code=400, content={"error": "Dataset not loaded."})
 
-    keyword = keyword.lower().strip()
+    keyword = unquote(keyword).lower().strip()
 
     # Filter rows by keyword in text columns
     mask = (
